@@ -25,8 +25,8 @@ public class PetriNetSimulatorController {
 
     @PostMapping("/cria-lugar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void criaLugar(@RequestBody int lugarId) {
-        petriNetService.criaLugar(lugarId);
+    public void criaLugar(@RequestBody int lugarId, int tokens) {
+        petriNetService.criaLugar(lugarId, tokens);
     }
 
     @DeleteMapping("/remove-lugar")

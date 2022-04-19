@@ -1,12 +1,31 @@
 package br.unisinos.edu.PetriNetSimulator.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Lugar {
-    int id;
+    private int id;
+    private int tokens;
+    
+    public Lugar() {
+    }
+
+    public Lugar(int id, int tokens) {
+        this.id = id;
+        this.tokens = tokens;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTokens() {
+        return tokens;
+    }
+    
+    public void seToken(int tokens) {
+        this.tokens = tokens;
+    }
 }
