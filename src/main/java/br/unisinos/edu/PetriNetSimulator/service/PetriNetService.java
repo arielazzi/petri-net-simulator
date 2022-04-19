@@ -8,20 +8,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PetriNetService {
-    // boolean criaLugar(int id) // id e’ a identificação do lugar ou transição
     public boolean criaLugar(int lugarId) {
-        PetriNetRepository.lugares.add(new Lugar(lugarId));
-        return true;
+        return PetriNetRepository.lugares.add(new Lugar(lugarId));
     }
 
     public Lugar getLugar(int lugarId) {
-        var lala = PetriNetRepository.lugares.stream().findFirst();
-        return lala.get();
+        var optionalLugar = PetriNetRepository.lugares.stream().findFirst();
+        return optionalLugar.get();
     }
 
-//    Lugar getLugar(int id)
-
-//    boolean removeLugar(int id)
+    public boolean removeLugar(int id) {
+        Lugar lugar = getLugar(id);
+        return PetriNetRepository.lugares.remove(lugar);
+    }
 //    boolean criaTransicao(int id)
 //    Transicao getTransicao(int id)
 //    boolean removeTransicao(int id)
