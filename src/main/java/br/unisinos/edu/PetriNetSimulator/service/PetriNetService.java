@@ -1,20 +1,63 @@
 package br.unisinos.edu.PetriNetSimulator.service;
 
+import br.unisinos.edu.PetriNetSimulator.domain.Conexao;
+import br.unisinos.edu.PetriNetSimulator.domain.Document;
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
+import br.unisinos.edu.PetriNetSimulator.domain.RedeDePetri;
 import br.unisinos.edu.PetriNetSimulator.repository.PetriNetRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
 public class PetriNetService {
-    public boolean criaLugar(int lugarId) {
-        return PetriNetRepository.lugares.add(new Lugar(lugarId));
+    public boolean criaLugar(int lugarId, int tokens) {
+        return PetriNetRepository.lugares.add(new Lugar(lugarId, tokens));
     }
 
     public Lugar getLugar(int lugarId) {
-        var optionalLugar = PetriNetRepository.lugares.stream().findFirst();
-        return optionalLugar.get();
+        var lugar = PetriNetRepository.lugares.stream().filter(l -> l.getId() == lugarId).findFirst();
+        return lugar.get();
+    }
+
+    public boolean criaConexao(int sourceId, int destinationId, int multiplicity) {
+        return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity));
+    }
+
+    public Conexao getConexao(int sourceId, int destinationId) {
+        var conexao = PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == sourceId &&
+                c.getDestinationId() == destinationId).findFirst();
+        return conexao.get();
+    }
+
+    public RedeDePetri fileParser(MultipartFile file) throws IOException {
+        File xmlFile = new File(file.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream( xmlFile );
+        fos.write( file.getBytes() );
+        fos.close();
+
+        JAXBContext jaxbContext;
+        Document document = new Document();
+        try
+        {
+            jaxbContext = JAXBContext.newInstance(Document.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            document = (Document)jaxbUnmarshaller.unmarshal(xmlFile);
+        }
+        catch (JAXBException e)
+        {
+            e.printStackTrace();
+        }
+        return document.getRedeDePetri();
     }
 
     public boolean removeLugar(int id) {
