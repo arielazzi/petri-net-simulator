@@ -1,9 +1,6 @@
 package br.unisinos.edu.PetriNetSimulator.service;
 
-import br.unisinos.edu.PetriNetSimulator.domain.Conexao;
-import br.unisinos.edu.PetriNetSimulator.domain.Document;
-import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
-import br.unisinos.edu.PetriNetSimulator.domain.RedeDePetri;
+import br.unisinos.edu.PetriNetSimulator.domain.*;
 import br.unisinos.edu.PetriNetSimulator.repository.PetriNetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,6 +47,21 @@ public class PetriNetService {
         Lugar lugar = getLugar(id);
         return PetriNetRepository.lugares.remove(lugar);
     }
+
+    public boolean criaTransicao(int id) {
+        return PetriNetRepository.transicoes.add(new Transicao(id));
+    }
+
+    public Transicao getTransicao(int id) {
+        var transicao = PetriNetRepository.transicoes.stream().filter(t -> t.getId() == id).findFirst();
+        return transicao.get();
+    }
+
+    public boolean removeTransicao(int id) {
+        Transicao transicao = getTransicao(id);
+        return PetriNetRepository.transicoes.remove(transicao);
+    }
+
 
     public boolean criaConexao(int sourceId, int destinationId, int multiplicity) {
         return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity));

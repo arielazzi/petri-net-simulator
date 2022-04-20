@@ -1,6 +1,7 @@
 package br.unisinos.edu.PetriNetSimulator.controller;
 
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
+import br.unisinos.edu.PetriNetSimulator.domain.Transicao;
 import br.unisinos.edu.PetriNetSimulator.service.PetriNetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,24 @@ public class PetriNetSimulatorController {
     @ResponseStatus(HttpStatus.OK)
     public boolean removeLugar(@RequestBody int id) {
         return petriNetService.removeLugar(id);
+    }
+
+    @GetMapping("/cria-transicao")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public boolean criaTransicao(@RequestBody int id) {
+        return petriNetService.criaTransicao(id);
+    }
+
+    @PostMapping("/get-transicao")
+    @ResponseStatus(HttpStatus.OK)
+    public Transicao getTransicao(@RequestBody int id) {
+        return petriNetService.getTransicao(id);
+    }
+
+    @DeleteMapping("/remove-transicao")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean removeTransicao(@RequestBody int id) {
+        return petriNetService.removeTransicao(id);
     }
 
 }
