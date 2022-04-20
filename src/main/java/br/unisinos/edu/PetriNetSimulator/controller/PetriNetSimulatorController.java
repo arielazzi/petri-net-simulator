@@ -4,12 +4,7 @@ import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
 import br.unisinos.edu.PetriNetSimulator.service.PetriNetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,16 +12,16 @@ public class PetriNetSimulatorController {
 
     private final PetriNetService petriNetService;
 
-    @GetMapping("/get-lugar")
-    @ResponseStatus(HttpStatus.OK)
-    public Lugar getLugar(@RequestBody int lugarId) {
-        return petriNetService.getLugar(lugarId);
+    @PostMapping("/criar-lugar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean criaLugar(@RequestBody int id, int tokens) {
+        return petriNetService.criaLugar(id, tokens);
     }
 
-    @PostMapping("/cria-lugar")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void criaLugar(@RequestBody int lugarId, int tokens) {
-        petriNetService.criaLugar(lugarId, tokens);
+    @GetMapping("/get-lugar")
+    @ResponseStatus(HttpStatus.OK)
+    public Lugar getLugar(@RequestBody int id) {
+        return petriNetService.getLugar(id);
     }
 
     @DeleteMapping("/remove-lugar")
