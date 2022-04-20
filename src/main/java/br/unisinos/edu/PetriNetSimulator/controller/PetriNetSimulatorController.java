@@ -1,5 +1,6 @@
 package br.unisinos.edu.PetriNetSimulator.controller;
 
+import br.unisinos.edu.PetriNetSimulator.domain.Conexao;
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
 import br.unisinos.edu.PetriNetSimulator.domain.Transicao;
 import br.unisinos.edu.PetriNetSimulator.service.PetriNetService;
@@ -31,13 +32,13 @@ public class PetriNetSimulatorController {
         return petriNetService.removeLugar(id);
     }
 
-    @GetMapping("/cria-transicao")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping("/cria-transicao")
+    @ResponseStatus(HttpStatus.CREATED)
     public boolean criaTransicao(@RequestBody int id) {
         return petriNetService.criaTransicao(id);
     }
 
-    @PostMapping("/get-transicao")
+    @GetMapping("/get-transicao")
     @ResponseStatus(HttpStatus.OK)
     public Transicao getTransicao(@RequestBody int id) {
         return petriNetService.getTransicao(id);
@@ -47,6 +48,32 @@ public class PetriNetSimulatorController {
     @ResponseStatus(HttpStatus.OK)
     public boolean removeTransicao(@RequestBody int id) {
         return petriNetService.removeTransicao(id);
+    }
+
+    @PostMapping("/cria-conexao")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean criaConexao() {
+        return true;
+    }
+
+    public boolean removeConexao() {
+        return true;
+    }
+
+    public Lugar getLugarDeConexao() {
+        return new Lugar();
+    }
+
+    public Transicao getTransicaoDeConexao() {
+        return new Transicao();
+    }
+
+    public Conexao[] getConexoesEntrada() {
+        return new Conexao[]{};
+    }
+
+    public Conexao[] getConexoesSaida() {
+        return new Conexao[]{};
     }
 
 }
