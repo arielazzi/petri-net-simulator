@@ -72,4 +72,13 @@ public class PetriNetService {
                 c.getDestinationId() == destinationId).findFirst();
         return conexao.get();
     }
+
+    public Conexao[] getConexoesEntrada(int id) {
+        return PetriNetRepository.conexoes.stream().filter(c -> c.getDestinationId() == id).toArray(Conexao[]::new);
+    }
+
+    public Conexao[] getConexoesSaida(int id) {
+        return PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == id).toArray(Conexao[]::new);
+    }
+
 }

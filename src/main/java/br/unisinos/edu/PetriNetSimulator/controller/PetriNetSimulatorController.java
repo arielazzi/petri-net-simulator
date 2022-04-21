@@ -52,8 +52,8 @@ public class PetriNetSimulatorController {
 
     @PostMapping("/cria-conexao")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean criaConexao() {
-        return true;
+    public boolean criaConexao(@RequestBody int sourceId, int destinationId, int multiplicity) {
+        return petriNetService.criaConexao(sourceId, destinationId, multiplicity);
     }
 
     public boolean removeConexao() {
@@ -68,12 +68,16 @@ public class PetriNetSimulatorController {
         return new Transicao();
     }
 
-    public Conexao[] getConexoesEntrada() {
-        return new Conexao[]{};
+    @GetMapping("/get-conexoes-entrada")
+    @ResponseStatus(HttpStatus.OK)
+    public Conexao[] getConexoesEntrada(@RequestBody int id) {
+        return petriNetService.getConexoesEntrada(id);
     }
 
-    public Conexao[] getConexoesSaida() {
-        return new Conexao[]{};
+    @GetMapping("/get-conexoes-saida")
+    @ResponseStatus(HttpStatus.OK)
+    public Conexao[] getConexoesSaida(@RequestBody int id) {
+        return petriNetService.getConexoesSaida(id);
     }
 
 }
