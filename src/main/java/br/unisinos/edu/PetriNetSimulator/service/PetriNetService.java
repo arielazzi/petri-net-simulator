@@ -35,31 +35,31 @@ public class PetriNetService {
     }
 
     public boolean criaLugar(int id, int tokens) {
-        return PetriNetRepository.lugares.add(new Lugar(id, tokens));
+        return PetriNetRepository.objetos.add(new Lugar(id, tokens));
     }
 
     public Lugar getLugar(int id) {
-        var lugar = PetriNetRepository.lugares.stream().filter(l -> l.getId() == id).findFirst();
-        return lugar.get();
+        var lugar = PetriNetRepository.objetos.stream().filter(l -> l.getId() == id).findFirst();
+        return (Lugar) lugar.get();
     }
 
     public boolean removeLugar(int id) {
         Lugar lugar = getLugar(id);
-        return PetriNetRepository.lugares.remove(lugar);
+        return PetriNetRepository.objetos.remove(lugar);
     }
 
     public boolean criaTransicao(int id) {
-        return PetriNetRepository.transicoes.add(new Transicao(id));
+        return PetriNetRepository.objetos.add(new Transicao(id));
     }
 
     public Transicao getTransicao(int id) {
-        var transicao = PetriNetRepository.transicoes.stream().filter(t -> t.getId() == id).findFirst();
-        return transicao.get();
+        var transicao = PetriNetRepository.objetos.stream().filter(t -> t.getId() == id).findFirst();
+        return (Transicao) transicao.get();
     }
 
     public boolean removeTransicao(int id) {
         Transicao transicao = getTransicao(id);
-        return PetriNetRepository.transicoes.remove(transicao);
+        return PetriNetRepository.objetos.remove(transicao);
     }
 
 
@@ -72,27 +72,4 @@ public class PetriNetService {
                 c.getDestinationId() == destinationId).findFirst();
         return conexao.get();
     }
-
-
-//    boolean criaTransicao(int id)
-//    Transicao getTransicao(int id)
-//    boolean removeTransicao(int id)
-//    boolean criaConexao(Lugar lugar, Transicao transicao, int peso, boolean ehEntrada, boolean ehArcoInibidor,
-//                        boolean removeConexao(Lugar lugar, Transicao transicao)
-//    Lugar getLugarDeConexao(Conexao conexao)
-//    Transicao getTransicaoDeConexao(Conexao conexao)
-//    Conexao[] getConexoesEntrada(int id) // retorna array de conexões de entrada de uma transição
-//    Conexao[] getConexoesSaida(int id) // retorna array de conexões de saida de uma transição
-//    void insereTokenEmLugar(Token token, Lugar lugar)
-//    boolean removeTokenDeLugar(Token token, Lugar lugar)
-//    void clearLugar(Lugar lugar) // remove todos tokens do lugar
-//    Token getToken(Lugar lugar) //retorna token
-//    Token[] getToken(Lugar lugar) //retorna um array de tokens
-//    int quantosTokens(int id) //retorna a quantidade de tokens de um lugar com este id
-//    boolean getStatusTransicao (int id) // retona True se Transição habilitada e False caso contrário;
-//    void setTransicaoInativa(int id) // seta transicao como inativa
-//    void setTransicaoAtiva(int id) // seta transicao como ativa (default)
-//    boolean isTransicaoAtiva(int id)
-//    boolean salvaRede (String nomeArquivo)
-//    Rede carregaRede (String nomeArquivo)
 }
