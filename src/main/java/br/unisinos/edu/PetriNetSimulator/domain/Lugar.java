@@ -3,23 +3,18 @@ package br.unisinos.edu.PetriNetSimulator.domain;
 import lombok.Data;
 
 @Data
-public class Lugar {
-    private int id;
+public class Lugar extends Objeto{
     private int tokens;
     
     public Lugar() {
+        super();
     }
 
     public Lugar(int id, int tokens) {
-        this.id = id;
+        super(id);
         this.tokens = tokens;
     }
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+
 
     public int getTokens() {
         return tokens;

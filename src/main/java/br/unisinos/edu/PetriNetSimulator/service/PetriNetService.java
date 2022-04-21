@@ -1,32 +1,33 @@
 package br.unisinos.edu.PetriNetSimulator.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import br.unisinos.edu.PetriNetSimulator.domain.Conexao;
 import br.unisinos.edu.PetriNetSimulator.domain.Document;
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
 import br.unisinos.edu.PetriNetSimulator.domain.RedeDePetri;
 import br.unisinos.edu.PetriNetSimulator.repository.PetriNetRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
 public class PetriNetService {
     public boolean criaLugar(int lugarId, int tokens) {
-        return PetriNetRepository.lugares.add(new Lugar(lugarId, tokens));
+        return PetriNetRepository.objetos.add(new Lugar(lugarId, tokens));
     }
 
     public Lugar getLugar(int lugarId) {
-        var lugar = PetriNetRepository.lugares.stream().filter(l -> l.getId() == lugarId).findFirst();
-        return lugar.get();
+        var lugar = PetriNetRepository.objetos.stream().filter(l -> l.getId() == lugarId).findFirst();
+        return (Lugar)lugar.get();
     }
 
     public boolean criaConexao(int sourceId, int destinationId, int multiplicity) {
@@ -62,7 +63,7 @@ public class PetriNetService {
 
     public boolean removeLugar(int id) {
         Lugar lugar = getLugar(id);
-        return PetriNetRepository.lugares.remove(lugar);
+        return PetriNetRepository.objetos.remove(lugar);
     }
 //    boolean criaTransicao(int id)
 //    Transicao getTransicao(int id)
