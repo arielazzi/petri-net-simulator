@@ -19,6 +19,7 @@ public class PetriNetSimulatorlLogicalController {
     public void executaCiclo(@RequestPart("file") MultipartFile file) throws IOException {
         RedeDePetri redeDePetri = petriNetService.fileParser(file);
         redeDePetri.getLugares().stream().forEach(lugar -> petriNetService.criaLugar(lugar.getId(), lugar.getTokens()));
+        redeDePetri.getTransicoes().stream().forEach(transicao -> petriNetService.criaTransicao(transicao.getId()));
         redeDePetri.getConexoes().stream().forEach(conexao -> petriNetService.criaConexao(conexao.getSourceId(),
                 conexao.getDestinationId(),conexao.getMultiplicity()));
     }
