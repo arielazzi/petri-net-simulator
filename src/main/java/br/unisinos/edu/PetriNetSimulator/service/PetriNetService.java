@@ -12,6 +12,9 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,24 +76,28 @@ public class PetriNetService {
         return conexao.get();
     }
 
-    public Conexao[] getConexoesEntrada(int id) {
-        return PetriNetRepository.conexoes.stream().filter(c -> c.getDestinationId() == id).toArray(Conexao[]::new);
+    public List<Conexao> getConexoesEntrada(int id) {
+        return PetriNetRepository.conexoes.stream().filter(c -> c.getDestinationId() == id).collect(Collectors.toList());
     }
 
-    public Conexao[] getConexoesSaida(int id) {
-        return PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == id).toArray(Conexao[]::new);
+    public List<Conexao> getConexoesSaida(int id) {
+        return PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == id).collect(Collectors.toList());
     }
 
-    public void insereTokenEmLugar(Lugar lugar) {
+    public Conexao getRandomConexao(List<Conexao> conexoes) {
+        return conexoes.get(new Random().nextInt(conexoes.size()));
+    }
+
+    public void insereTokenEmLugar(Lugar lugar, int qtd) {
         int tokens = lugar.getTokens();
-        lugar.setTokens(tokens + 1);
+        lugar.setTokens(tokens + qtd);
     }
 
-    public boolean removeTokenDeLugar(Lugar lugar) {
+    public boolean removeTokenDeLugar(Lugar lugar, int qtd) {
         int tokens = lugar.getTokens();
 
-        if (tokens > 1) {
-            lugar.setTokens(tokens);
+        if (tokens > 0) {
+            lugar.setTokens(tokens - qtd);
             return true;
         } else {
             return false;

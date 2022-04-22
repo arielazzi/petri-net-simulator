@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class PetriNetSimulatorController {
@@ -70,26 +72,26 @@ public class PetriNetSimulatorController {
 
     @GetMapping("/get-conexoes-entrada")
     @ResponseStatus(HttpStatus.OK)
-    public Conexao[] getConexoesEntrada(@RequestBody int id) {
+    public List<Conexao> getConexoesEntrada(@RequestBody int id) {
         return petriNetService.getConexoesEntrada(id);
     }
 
     @GetMapping("/get-conexoes-saida")
     @ResponseStatus(HttpStatus.OK)
-    public Conexao[] getConexoesSaida(@RequestBody int id) {
+    public List<Conexao> getConexoesSaida(@RequestBody int id) {
         return petriNetService.getConexoesSaida(id);
     }
 
     @PostMapping("/insere-token-em-lugar")
     @ResponseStatus(HttpStatus.CREATED)
     public void insereTokenEmLugar(@RequestBody Lugar lugar) {
-        petriNetService.insereTokenEmLugar(lugar);
+        petriNetService.insereTokenEmLugar(lugar, 1);
     }
 
     @DeleteMapping("/remove-token-de-lugar")
     @ResponseStatus(HttpStatus.OK)
     public boolean removeTokenDeLugar(@RequestBody Lugar lugar) {
-        return petriNetService.removeTokenDeLugar(lugar);
+        return petriNetService.removeTokenDeLugar(lugar, 1);
     }
 
     @PutMapping("/clear-lugar")
