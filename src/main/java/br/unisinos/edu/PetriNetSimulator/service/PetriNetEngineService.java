@@ -82,13 +82,14 @@ public class PetriNetEngineService {
         String[][] table2 = new String[][]{aaaa.toArray(new String[0]), bbb.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table2);
 
-        System.out.println("Press enter to continue");
-        try {
-            System.in.read();
-        } catch (Exception e) {
+        if (!lugaresAtvos.isEmpty()) {
+            System.out.println("Press enter to continue");
+            try {
+                System.in.read();
+            } catch (Exception e) {
+            }
+            executarEnginePassoAPasso();
         }
-
-        executarEnginePassoAPasso();
 
 
     }
