@@ -80,4 +80,28 @@ public class PetriNetSimulatorController {
         return petriNetService.getConexoesSaida(id);
     }
 
+    @PostMapping("/insere-token-em-lugar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void insereTokenEmLugar(@RequestBody Lugar lugar) {
+        petriNetService.insereTokenEmLugar(lugar);
+    }
+
+    @DeleteMapping("/remove-token-de-lugar")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean removeTokenDeLugar(@RequestBody Lugar lugar) {
+        return petriNetService.removeTokenDeLugar(lugar);
+    }
+
+    @PutMapping("/clear-lugar")
+    @ResponseStatus(HttpStatus.OK)
+    public void clearLugar(@RequestBody Lugar lugar) {
+        petriNetService.clearLugar(lugar);
+    }
+
+    @GetMapping("/get-token")
+    @ResponseStatus(HttpStatus.OK)
+    public int getToken(Lugar lugar) {
+        return petriNetService.getToken(lugar);
+    }
+
 }

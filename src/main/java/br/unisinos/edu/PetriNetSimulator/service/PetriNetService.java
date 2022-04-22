@@ -81,4 +81,28 @@ public class PetriNetService {
         return PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == id).toArray(Conexao[]::new);
     }
 
+    public void insereTokenEmLugar(Lugar lugar) {
+        int tokens = lugar.getTokens();
+        lugar.setTokens(tokens + 1);
+    }
+
+    public boolean removeTokenDeLugar(Lugar lugar) {
+        int tokens = lugar.getTokens();
+
+        if (tokens > 1) {
+            lugar.setTokens(tokens);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void clearLugar(Lugar lugar) {
+        lugar.setTokens(0);
+    }
+
+    public int getToken(Lugar lugar) {
+        return lugar.getTokens();
+    }
+
 }
