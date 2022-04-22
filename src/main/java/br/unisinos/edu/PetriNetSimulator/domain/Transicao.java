@@ -1,6 +1,16 @@
 package br.unisinos.edu.PetriNetSimulator.domain;
 
-public class Transicao extends Objeto{
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Transicao extends Objeto {
+
+    private int id;
+    
     public Transicao(int id) {
         super(id);
     }

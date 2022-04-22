@@ -1,15 +1,12 @@
 package br.unisinos.edu.PetriNetSimulator.controller;
 
+import br.unisinos.edu.PetriNetSimulator.domain.Conexao;
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
+import br.unisinos.edu.PetriNetSimulator.domain.Transicao;
 import br.unisinos.edu.PetriNetSimulator.service.PetriNetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,22 +14,70 @@ public class PetriNetSimulatorController {
 
     private final PetriNetService petriNetService;
 
-    @GetMapping("/get-lugar")
-    @ResponseStatus(HttpStatus.OK)
-    public Lugar getLugar(@RequestBody int lugarId) {
-        return petriNetService.getLugar(lugarId);
+    @PostMapping("/criar-lugar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean criaLugar(@RequestBody int id, int tokens) {
+        return petriNetService.criaLugar(id, tokens);
     }
 
-    @PostMapping("/cria-lugar")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void criaLugar(@RequestBody int lugarId, int tokens) {
-        petriNetService.criaLugar(lugarId, tokens);
+    @GetMapping("/get-lugar")
+    @ResponseStatus(HttpStatus.OK)
+    public Lugar getLugar(@RequestBody int id) {
+        return petriNetService.getLugar(id);
     }
 
     @DeleteMapping("/remove-lugar")
     @ResponseStatus(HttpStatus.OK)
     public boolean removeLugar(@RequestBody int id) {
         return petriNetService.removeLugar(id);
+    }
+
+    @PostMapping("/cria-transicao")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean criaTransicao(@RequestBody int id) {
+        return petriNetService.criaTransicao(id);
+    }
+
+    @GetMapping("/get-transicao")
+    @ResponseStatus(HttpStatus.OK)
+    public Transicao getTransicao(@RequestBody int id) {
+        return petriNetService.getTransicao(id);
+    }
+
+    @DeleteMapping("/remove-transicao")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean removeTransicao(@RequestBody int id) {
+        return petriNetService.removeTransicao(id);
+    }
+
+    @PostMapping("/cria-conexao")
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean criaConexao(@RequestBody int sourceId, int destinationId, int multiplicity) {
+        return petriNetService.criaConexao(sourceId, destinationId, multiplicity);
+    }
+
+    public boolean removeConexao() {
+        return true;
+    }
+
+    public Lugar getLugarDeConexao() {
+        return new Lugar();
+    }
+
+    public Transicao getTransicaoDeConexao() {
+        return new Transicao();
+    }
+
+    @GetMapping("/get-conexoes-entrada")
+    @ResponseStatus(HttpStatus.OK)
+    public Conexao[] getConexoesEntrada(@RequestBody int id) {
+        return petriNetService.getConexoesEntrada(id);
+    }
+
+    @GetMapping("/get-conexoes-saida")
+    @ResponseStatus(HttpStatus.OK)
+    public Conexao[] getConexoesSaida(@RequestBody int id) {
+        return petriNetService.getConexoesSaida(id);
     }
 
 }
