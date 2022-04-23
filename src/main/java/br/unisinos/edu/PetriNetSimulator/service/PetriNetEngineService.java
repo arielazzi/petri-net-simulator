@@ -38,7 +38,9 @@ public class PetriNetEngineService {
                 .map(l -> {
                     var lugar = (Lugar) l;
                     var conexoesL = petriNetService.getConexoesSaida(lugar.getId());
-                    conexoesL.removeIf(c -> c.getType().equals("regular") && c.getMultiplicity() > lugar.getTokens());
+                    if (!conexoesL.removeIf(c -> c.getType().equals("regular") && c.getMultiplicity() > lugar.getTokens())) {
+
+                    }
                     return conexoesL;
                 })
                 .filter(c -> !c.isEmpty())
@@ -46,7 +48,7 @@ public class PetriNetEngineService {
 
         lugaresAtivos.forEach(la -> {
             var conexao = petriNetService.getRandomConexao(la);
-            petriNetService.removeTokenDeLugar(petriNetService.getLugar(conexao.getSourceId()), conexao.getMultiplicity());
+            petriNetService.removeTokenDeLugar(petriNetService.getLugar(conexao.getSourceId()), conexao.getMultiplicity(), conexao.getType());
             System.out.println("Source Id: " + conexao.getSourceId() + " - Destination Id:" + conexao.getDestinationId());
 
             var transicao = petriNetService.getTransicao(conexao.getDestinationId());
