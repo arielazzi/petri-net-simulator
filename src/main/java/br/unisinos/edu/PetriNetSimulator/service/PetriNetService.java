@@ -65,15 +65,8 @@ public class PetriNetService {
         return PetriNetRepository.objetos.remove(transicao);
     }
 
-
     public boolean criaConexao(int sourceId, int destinationId, int multiplicity, String type) {
         return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity, type));
-    }
-
-    public Conexao getConexao(int sourceId, int destinationId) {
-        var conexao = PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == sourceId &&
-                c.getDestinationId() == destinationId).findFirst();
-        return conexao.get();
     }
 
     public List<Conexao> getConexoesEntrada(int id) {
@@ -93,15 +86,18 @@ public class PetriNetService {
         lugar.setTokens(tokens + qtd);
     }
 
-    public boolean removeTokenDeLugar(Lugar lugar, int qtd) {
+    public boolean removeTokenDeLugar(Lugar lugar, int qtd, String arcType) {
         int tokens = lugar.getTokens();
 
-        if (tokens > 0) {
+        if (tokens > 0 && arcType.equals("regular")) {
             lugar.setTokens(tokens - qtd);
             return true;
-        } else {
-            return false;
         }
+        else if (tokens > 0 && arcType.equals("reset")) {
+            lugar.setTokens(0);
+            return true;
+        }
+        else { return false; }
     }
 
     public void clearLugar(Lugar lugar) {

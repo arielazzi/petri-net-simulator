@@ -90,8 +90,8 @@ public class PetriNetSimulatorController {
 
     @DeleteMapping("/remove-token-de-lugar")
     @ResponseStatus(HttpStatus.OK)
-    public boolean removeTokenDeLugar(@RequestBody Lugar lugar) {
-        return petriNetService.removeTokenDeLugar(lugar, 1);
+    public boolean removeTokenDeLugar(@RequestBody Lugar lugar, String arcType) {
+        return petriNetService.removeTokenDeLugar(lugar, 1, arcType);
     }
 
     @PutMapping("/clear-lugar")
