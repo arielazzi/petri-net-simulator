@@ -58,18 +58,6 @@ public class PetriNetSimulatorController {
         return petriNetService.criaConexao(sourceId, destinationId, multiplicity, type);
     }
 
-    public boolean removeConexao() {
-        return true;
-    }
-
-    public Lugar getLugarDeConexao() {
-        return new Lugar();
-    }
-
-    public Transicao getTransicaoDeConexao() {
-        return new Transicao();
-    }
-
     @GetMapping("/get-conexoes-entrada")
     @ResponseStatus(HttpStatus.OK)
     public List<Conexao> getConexoesEntrada(@RequestBody int id) {

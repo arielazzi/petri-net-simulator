@@ -19,21 +19,7 @@ public class PetriNetEngineService {
     private final PetriNetService petriNetService;
 
     public void executarEnginePassoAPasso() {
-        List<String> rowLugares = new ArrayList<>();
-        rowLugares.add("Lugar");
-        List<String> rowTokens = new ArrayList<>();
-        rowTokens.add("Marcacão");
-
-        PetriNetRepository.objetos.forEach(objeto -> {
-            if (objeto instanceof Lugar) {
-                var lugar = (Lugar) objeto;
-                rowLugares.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
-                rowTokens.add("  " + lugar.getTokens() + "  ");
-            }
-        });
-
-        String[][] table = new String[][]{rowLugares.toArray(new String[0]), rowTokens.toArray(new String[0])};
-        Table.tableWithLinesAndMaxWidth(table);
+        montaTabelaLugares();
 
         var transicoesAtivas = PetriNetRepository.objetos.stream()
                 .filter(o -> o instanceof Transicao)
@@ -61,26 +47,7 @@ public class PetriNetEngineService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        List<String> rowLugares3 = new ArrayList<>();
-        rowLugares3.add("Transição");
-        List<String> rowTokens3 = new ArrayList<>();
-        rowTokens3.add("habilitada?");
-
-        PetriNetRepository.objetos.forEach(objeto -> {
-            if (objeto instanceof Transicao) {
-                var transicao = (Transicao) objeto;
-                rowLugares3.add("  " + transicao.getId() + " (" + transicao.getLabel() + ") ");
-                if (transicoesAtivas.stream().anyMatch(ta -> ta.getId() == transicao.getId())) {
-                    rowTokens3.add("  Sim  ");
-                } else {
-                    rowTokens3.add("  Não  ");
-                }
-            }
-        });
-
-        String[][] table3 = new String[][]{rowLugares3.toArray(new String[0]), rowTokens3.toArray(new String[0])};
-        Table.tableWithLinesAndMaxWidth(table3);
-
+        montaTabelaTransicoes(transicoesAtivas);
 
         transicoesAtivas.forEach(transicao -> {
             var conexoesEntrada = petriNetService.getConexoesEntrada(transicao.getId());
@@ -101,21 +68,6 @@ public class PetriNetEngineService {
             });
         });
 
-        List<String> rowLugares2 = new ArrayList<>();
-        rowLugares2.add("Lugar");
-        List<String> rowTokens2 = new ArrayList<>();
-        rowTokens2.add("Marcacão");
-        PetriNetRepository.objetos.forEach(objeto -> {
-            if (objeto instanceof Lugar) {
-                var lugar = (Lugar) objeto;
-                rowLugares2.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
-                rowTokens2.add("  " + lugar.getTokens() + "  ");
-            }
-        });
-
-        String[][] table2 = new String[][]{rowLugares2.toArray(new String[0]), rowTokens2.toArray(new String[0])};
-        Table.tableWithLinesAndMaxWidth(table2);
-
         if (!transicoesAtivas.isEmpty()) {
             System.out.println("Press enter to continue");
             try {
@@ -124,5 +76,41 @@ public class PetriNetEngineService {
             }
             executarEnginePassoAPasso();
         }
+    }
+
+    private void montaTabelaLugares(){
+        List<String> rowLugares = new ArrayList<>();
+        rowLugares.add("Lugar");
+        List<String> rowTokens = new ArrayList<>();
+        rowTokens.add("Marcacão");
+
+        PetriNetRepository.objetos.forEach(objeto -> {
+            if (objeto instanceof Lugar) {
+                var lugar = (Lugar) objeto;
+                rowLugares.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
+                rowTokens.add("  " + lugar.getTokens() + "  ");
+            }
+        });
+
+        String[][] tableLugares = new String[][]{rowLugares.toArray(new String[0]), rowTokens.toArray(new String[0])};
+        Table.tableWithLinesAndMaxWidth(tableLugares);
+    }
+
+    private void montaTabelaTransicoes(List<Transicao> transicoesAtivas){
+        List<String> rowTransicoes = new ArrayList<>();
+        rowTransicoes.add("Transição");
+        List<String> rowHabilitada = new ArrayList<>();
+        rowHabilitada.add("Habilitada");
+
+        PetriNetRepository.objetos.forEach(objeto -> {
+            if (objeto instanceof Transicao) {
+                var transicao = (Transicao) objeto;
+                rowTransicoes.add("  " + transicao.getId() + " (" + transicao.getLabel() + ") ");
+                rowHabilitada.add("  " + (transicoesAtivas.contains(transicao) ? "S" : "N") + "  ");
+            }
+        });
+
+        String[][] tableTransicoes = new String[][]{rowTransicoes.toArray(new String[0]), rowHabilitada.toArray(new String[0])};
+        Table.tableWithLinesAndMaxWidth(tableTransicoes);
     }
 }
