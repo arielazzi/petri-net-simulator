@@ -26,7 +26,7 @@ public class PetriNetEngineService {
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                lug.add("  " + lugar.getId() + "  ");
+                lug.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
                 tok.add("  " + lugar.getTokens() + "  ");
             }
         });
@@ -35,19 +35,19 @@ public class PetriNetEngineService {
         Table.tableWithLinesAndMaxWidth(table);
 
 
-        var lugaresAtvos = PetriNetRepository.objetos.stream()
+        var lugaresAtivos = PetriNetRepository.objetos.stream()
                 .filter(o -> o instanceof Lugar)
                 .map(l -> {
                     var lugar = (Lugar) l;
                     var conexoesL = petriNetService.getConexoesSaida(lugar.getId());
-                    conexoesL.removeIf(c -> c.getMultiplicity() > lugar.getTokens());
+                    conexoesL.removeIf(c -> c.getType().equals("regular") && c.getMultiplicity() > lugar.getTokens());
                     return conexoesL;
                 })
                 .filter(c -> !c.isEmpty())
                 .collect(Collectors.toList());
 
 
-        lugaresAtvos.forEach(la -> {
+        lugaresAtivos.forEach(la -> {
 
             var al = petriNetService.getRandomConexao(la);
             petriNetService.removeTokenDeLugar(petriNetService.getLugar(al.getSourceId()), al.getMultiplicity());
@@ -73,7 +73,7 @@ public class PetriNetEngineService {
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                aaaa.add("  " + lugar.getId() + "  ");
+                aaaa.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
                 bbb.add("  " + lugar.getTokens() + "  ");
             }
         });
@@ -81,7 +81,7 @@ public class PetriNetEngineService {
         String[][] table2 = new String[][]{aaaa.toArray(new String[0]), bbb.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table2);
 
-        if (!lugaresAtvos.isEmpty()) {
+        if (!lugaresAtivos.isEmpty()) {
             System.out.println("Press enter to continue");
             try {
                 System.in.read();
