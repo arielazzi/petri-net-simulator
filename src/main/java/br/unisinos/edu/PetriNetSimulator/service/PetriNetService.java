@@ -37,8 +37,8 @@ public class PetriNetService {
         return document.getRedeDePetri();
     }
 
-    public boolean criaLugar(int id, int tokens) {
-        return PetriNetRepository.objetos.add(new Lugar(id, tokens));
+    public boolean criaLugar(int id, int tokens, String label) {
+        return PetriNetRepository.objetos.add(new Lugar(id, tokens, label));
     }
 
     public Lugar getLugar(int id) {
@@ -51,8 +51,8 @@ public class PetriNetService {
         return PetriNetRepository.objetos.remove(lugar);
     }
 
-    public boolean criaTransicao(int id) {
-        return PetriNetRepository.objetos.add(new Transicao(id));
+    public boolean criaTransicao(int id, String label) {
+        return PetriNetRepository.objetos.add(new Transicao(id, label));
     }
 
     public Transicao getTransicao(int id) {
@@ -66,8 +66,8 @@ public class PetriNetService {
     }
 
 
-    public boolean criaConexao(int sourceId, int destinationId, int multiplicity) {
-        return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity));
+    public boolean criaConexao(int sourceId, int destinationId, int multiplicity, String type) {
+        return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity, type));
     }
 
     public Conexao getConexao(int sourceId, int destinationId) {

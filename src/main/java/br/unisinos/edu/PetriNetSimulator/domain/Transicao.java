@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Transicao extends Objeto {
 
-    public Transicao(int id) {
+    private String label;
+    public Transicao(int id, String label) {
         super(id);
+        this.label = label;
     }
 }

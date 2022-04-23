@@ -8,12 +8,15 @@ public class Conexao {
     private int destinationId;
     private int multiplicity;
 
+    private String type;
+
     public Conexao() {}
 
-    public Conexao(int sourceId, int destinationId, int multiplicity) {
+    public Conexao(int sourceId, int destinationId, int multiplicity, String type) {
         this.sourceId = sourceId;
         this.destinationId = destinationId;
         this.multiplicity = multiplicity;
+        this.type = type;
     }
 
     public int getSourceId() {

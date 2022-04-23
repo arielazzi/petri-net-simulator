@@ -50,7 +50,6 @@ public class PetriNetEngineService {
         lugaresAtvos.forEach(la -> {
 
             var al = petriNetService.getRandomConexao(la);
-            // todo: remover qtd de tokens from source
             petriNetService.removeTokenDeLugar(petriNetService.getLugar(al.getSourceId()), al.getMultiplicity());
             System.out.println("source id: " + al.getSourceId() + " - destination id:" + al.getDestinationId());
 

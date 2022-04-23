@@ -18,9 +18,9 @@ public class PetriNetSimulatorlLogicalController {
     @PostMapping(value = "/executa", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public void executaCiclo(@RequestPart("file") MultipartFile file) throws IOException {
         RedeDePetri redeDePetri = petriNetService.fileParser(file);
-        redeDePetri.getLugares().stream().forEach(lugar -> petriNetService.criaLugar(lugar.getId(), lugar.getTokens()));
-        redeDePetri.getTransicoes().stream().forEach(transicao -> petriNetService.criaTransicao(transicao.getId()));
+        redeDePetri.getLugares().stream().forEach(lugar -> petriNetService.criaLugar(lugar.getId(), lugar.getTokens(), lugar.getLabel()));
+        redeDePetri.getTransicoes().stream().forEach(transicao -> petriNetService.criaTransicao(transicao.getId(), transicao.getLabel()));
         redeDePetri.getConexoes().stream().forEach(conexao -> petriNetService.criaConexao(conexao.getSourceId(),
-                conexao.getDestinationId(),conexao.getMultiplicity()));
+                conexao.getDestinationId(),conexao.getMultiplicity(), conexao.getType()));
     }
 }

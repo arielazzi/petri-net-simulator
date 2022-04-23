@@ -18,8 +18,8 @@ public class PetriNetSimulatorController {
 
     @PostMapping("/criar-lugar")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean criaLugar(@RequestBody int id, int tokens) {
-        return petriNetService.criaLugar(id, tokens);
+    public boolean criaLugar(@RequestBody int id, int tokens, String label) {
+        return petriNetService.criaLugar(id, tokens, label);
     }
 
     @GetMapping("/get-lugar")
@@ -36,8 +36,8 @@ public class PetriNetSimulatorController {
 
     @PostMapping("/cria-transicao")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean criaTransicao(@RequestBody int id) {
-        return petriNetService.criaTransicao(id);
+    public boolean criaTransicao(@RequestBody int id, String label) {
+        return petriNetService.criaTransicao(id, label);
     }
 
     @GetMapping("/get-transicao")
@@ -54,8 +54,8 @@ public class PetriNetSimulatorController {
 
     @PostMapping("/cria-conexao")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean criaConexao(@RequestBody int sourceId, int destinationId, int multiplicity) {
-        return petriNetService.criaConexao(sourceId, destinationId, multiplicity);
+    public boolean criaConexao(@RequestBody int sourceId, int destinationId, int multiplicity, String type) {
+        return petriNetService.criaConexao(sourceId, destinationId, multiplicity, type);
     }
 
     public boolean removeConexao() {
