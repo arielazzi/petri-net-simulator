@@ -61,6 +61,26 @@ public class PetriNetEngineService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+        List<String> rowLugares3 = new ArrayList<>();
+        rowLugares3.add("Transição");
+        List<String> rowTokens3 = new ArrayList<>();
+        rowTokens3.add("habilitada?");
+
+        PetriNetRepository.objetos.forEach(objeto -> {
+            if (objeto instanceof Transicao) {
+                var transicao = (Transicao) objeto;
+                rowLugares3.add("  " + transicao.getId() + " (" + transicao.getLabel() + ") ");
+                if (transicoesAtivas.stream().anyMatch(ta -> ta.getId() == transicao.getId())) {
+                    rowTokens3.add("  Sim  ");
+                } else {
+                    rowTokens3.add("  Não  ");
+                }
+            }
+        });
+
+        String[][] table3 = new String[][]{rowLugares3.toArray(new String[0]), rowTokens3.toArray(new String[0])};
+        Table.tableWithLinesAndMaxWidth(table3);
+
 
         transicoesAtivas.forEach(transicao -> {
             var conexoesEntrada = petriNetService.getConexoesEntrada(transicao.getId());
