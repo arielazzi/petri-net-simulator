@@ -1,8 +1,12 @@
 package br.unisinos.edu.PetriNetSimulator.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 public class Lugar extends Objeto{
     private int tokens;
     private String label;
@@ -15,14 +19,5 @@ public class Lugar extends Objeto{
         super(id);
         this.tokens = tokens;
         this.label = label;
-    }
-
-
-    public int getTokens() {
-        return tokens;
-    }
-    
-    public void seToken(int tokens) {
-        this.tokens = tokens;
     }
 }

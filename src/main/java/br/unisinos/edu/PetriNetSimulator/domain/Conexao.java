@@ -1,8 +1,14 @@
 package br.unisinos.edu.PetriNetSimulator.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Conexao {
     private int sourceId;
     private int destinationId;
@@ -10,36 +16,10 @@ public class Conexao {
 
     private String type;
 
-    public Conexao() {}
-
     public Conexao(int sourceId, int destinationId, int multiplicity, String type) {
         this.sourceId = sourceId;
         this.destinationId = destinationId;
         this.multiplicity = multiplicity;
         this.type = type;
-    }
-
-    public int getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(int sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    public int getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(int destinationId) {
-        this.destinationId = destinationId;
-    }
-
-    public int getMultiplicity() {
-        return multiplicity;
-    }
-
-    public void setMultiplicity(int multiplicity) {
-        this.multiplicity = multiplicity;
     }
 }

@@ -17,23 +17,21 @@ public class PetriNetEngineService {
     private final PetriNetService petriNetService;
 
     public void executarEnginePassoAPasso() {
+        List<String> rowLugares = new ArrayList<>();
+        rowLugares.add("Lugar");
+        List<String> rowTokens = new ArrayList<>();
+        rowTokens.add("Marcacão");
 
-
-        List<String> lug = new ArrayList<>();
-        lug.add("Lugar");
-        List<String> tok = new ArrayList<>();
-        tok.add("Marcacão");
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                lug.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
-                tok.add("  " + lugar.getTokens() + "  ");
+                rowLugares.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
+                rowTokens.add("  " + lugar.getTokens() + "  ");
             }
         });
 
-        String[][] table = new String[][]{lug.toArray(new String[0]), tok.toArray(new String[0])};
+        String[][] table = new String[][]{rowLugares.toArray(new String[0]), rowTokens.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table);
-
 
         var lugaresAtivos = PetriNetRepository.objetos.stream()
                 .filter(o -> o instanceof Lugar)
@@ -46,39 +44,36 @@ public class PetriNetEngineService {
                 .filter(c -> !c.isEmpty())
                 .collect(Collectors.toList());
 
-
         lugaresAtivos.forEach(la -> {
+            var conexao = petriNetService.getRandomConexao(la);
+            petriNetService.removeTokenDeLugar(petriNetService.getLugar(conexao.getSourceId()), conexao.getMultiplicity());
+            System.out.println("Source Id: " + conexao.getSourceId() + " - Destination Id:" + conexao.getDestinationId());
 
-            var al = petriNetService.getRandomConexao(la);
-            petriNetService.removeTokenDeLugar(petriNetService.getLugar(al.getSourceId()), al.getMultiplicity());
-            System.out.println("source id: " + al.getSourceId() + " - destination id:" + al.getDestinationId());
+            var transicao = petriNetService.getTransicao(conexao.getDestinationId());
+            System.out.println("Transição Id: " + transicao.getId());
 
-            var transicao = petriNetService.getTransicao(al.getDestinationId());
-            System.out.println("transicao id: " + transicao.getId());
-
-            var conexoesT = petriNetService.getConexoesSaida(transicao.getId());
-            conexoesT.forEach(c -> {
+            var conexoesDestinos = petriNetService.getConexoesSaida(transicao.getId());
+            conexoesDestinos.forEach(c -> {
                 var lugarDestino = petriNetService.getLugar(c.getDestinationId());
-                System.out.println("lugar Destino id: " + lugarDestino.getId());
+                System.out.println("Lugar Destino Label: " + lugarDestino.getLabel() +  "Id: " + lugarDestino.getId());
                 petriNetService.insereTokenEmLugar(lugarDestino, c.getMultiplicity());
             });
             System.out.println("------------------------");
         });
 
-
-        List<String> aaaa = new ArrayList<>();
-        aaaa.add("Lugar");
-        List<String> bbb = new ArrayList<>();
-        bbb.add("Marcacão");
+        List<String> rowLugares2 = new ArrayList<>();
+        rowLugares2.add("Lugar");
+        List<String> rowTokens2 = new ArrayList<>();
+        rowTokens2.add("Marcacão");
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                aaaa.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
-                bbb.add("  " + lugar.getTokens() + "  ");
+                rowLugares2.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
+                rowTokens2.add("  " + lugar.getTokens() + "  ");
             }
         });
 
-        String[][] table2 = new String[][]{aaaa.toArray(new String[0]), bbb.toArray(new String[0])};
+        String[][] table2 = new String[][]{rowLugares2.toArray(new String[0]), rowTokens2.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table2);
 
         if (!lugaresAtivos.isEmpty()) {
@@ -89,8 +84,5 @@ public class PetriNetEngineService {
             }
             executarEnginePassoAPasso();
         }
-
-
     }
-
 }

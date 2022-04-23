@@ -65,15 +65,8 @@ public class PetriNetService {
         return PetriNetRepository.objetos.remove(transicao);
     }
 
-
     public boolean criaConexao(int sourceId, int destinationId, int multiplicity, String type) {
         return PetriNetRepository.conexoes.add(new Conexao(sourceId, destinationId, multiplicity, type));
-    }
-
-    public Conexao getConexao(int sourceId, int destinationId) {
-        var conexao = PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == sourceId &&
-                c.getDestinationId() == destinationId).findFirst();
-        return conexao.get();
     }
 
     public List<Conexao> getConexoesEntrada(int id) {
