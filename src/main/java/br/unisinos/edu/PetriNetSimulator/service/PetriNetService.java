@@ -112,4 +112,21 @@ public class PetriNetService {
         return lugar.getTokens();
     }
 
+    public boolean validaConexaoReset(Conexao conexao, Lugar lugar) {
+        if (conexao.getType().equals("regular")) {
+            return conexao.getMultiplicity() <= lugar.getTokens();
+        }
+        return true;
+    }
+
+    public boolean validaConexaoInhibitor(Conexao conexao, Lugar lugar) {
+        if (conexao.getType().equals("inhibitor")) {
+            return !(conexao.getMultiplicity() <= lugar.getTokens());
+        }
+        if (conexao.getType().equals("regular")) {
+            return conexao.getMultiplicity() <= lugar.getTokens();
+        }
+        return false;
+    }
+
 }

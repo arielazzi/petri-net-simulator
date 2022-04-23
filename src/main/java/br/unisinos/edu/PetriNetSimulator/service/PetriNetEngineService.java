@@ -1,12 +1,14 @@
 package br.unisinos.edu.PetriNetSimulator.service;
 
 import br.unisinos.edu.PetriNetSimulator.domain.Lugar;
+import br.unisinos.edu.PetriNetSimulator.domain.Transicao;
 import br.unisinos.edu.PetriNetSimulator.repository.PetriNetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,7 @@ public class PetriNetEngineService {
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                lug.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
+                lug.add("  " + lugar.getLabel() + "  ");
                 tok.add("  " + lugar.getTokens() + "  ");
             }
         });
@@ -34,35 +36,50 @@ public class PetriNetEngineService {
         String[][] table = new String[][]{lug.toArray(new String[0]), tok.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table);
 
+        var transicoesAtivas = PetriNetRepository.objetos.stream()
+                .filter(o -> o instanceof Transicao)
+                .map(t -> {
+                    var transicao = (Transicao) t;
+                    var conexoesL = petriNetService.getConexoesEntrada(transicao.getId());
 
-        var lugaresAtivos = PetriNetRepository.objetos.stream()
-                .filter(o -> o instanceof Lugar)
-                .map(l -> {
-                    var lugar = (Lugar) l;
-                    var conexoesL = petriNetService.getConexoesSaida(lugar.getId());
-                    conexoesL.removeIf(c -> c.getType().equals("regular") && c.getMultiplicity() > lugar.getTokens());
-                    return conexoesL;
+                    // Valida se tem arco de reset
+                    var temInhibitor = conexoesL.stream().anyMatch(c -> c.getType().equals("inhibitor"));
+                    if (temInhibitor) {
+                        var manterTransicao = conexoesL.stream().allMatch(c -> petriNetService.validaConexaoInhibitor(c, petriNetService.getLugar(c.getSourceId())));
+                        if (manterTransicao) {
+                            return transicao;
+                        } else {
+                            return null;
+                        }
+                    }
+                    var manterTransicao = conexoesL.stream().allMatch(c -> petriNetService.validaConexaoReset(c, petriNetService.getLugar(c.getSourceId())));
+                    if (manterTransicao) {
+                        return transicao;
+                    } else {
+                        return null;
+                    }
                 })
-                .filter(c -> !c.isEmpty())
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+        transicoesAtivas.forEach(transicao -> {
+            var conexoesEntrada = petriNetService.getConexoesEntrada(transicao.getId());
+            var conexoesSaida = petriNetService.getConexoesSaida(transicao.getId());
 
-        lugaresAtivos.forEach(la -> {
+            // Remove tokens da origem
+            conexoesEntrada.forEach(c -> {
+                var lugarOrigem = petriNetService.getLugar(c.getSourceId());
+                var qtd = c.getType().equals("reset") ? lugarOrigem.getTokens() : c.getMultiplicity();
+                if (!c.getType().equals("inhibitor")) {
+                    petriNetService.removeTokenDeLugar(lugarOrigem, qtd);
+                }
+            });
 
-            var al = petriNetService.getRandomConexao(la);
-            petriNetService.removeTokenDeLugar(petriNetService.getLugar(al.getSourceId()), al.getMultiplicity());
-            System.out.println("source id: " + al.getSourceId() + " - destination id:" + al.getDestinationId());
-
-            var transicao = petriNetService.getTransicao(al.getDestinationId());
-            System.out.println("transicao id: " + transicao.getId());
-
-            var conexoesT = petriNetService.getConexoesSaida(transicao.getId());
-            conexoesT.forEach(c -> {
+            // insere tokens no destino
+            conexoesSaida.forEach(c -> {
                 var lugarDestino = petriNetService.getLugar(c.getDestinationId());
-                System.out.println("lugar Destino id: " + lugarDestino.getId());
                 petriNetService.insereTokenEmLugar(lugarDestino, c.getMultiplicity());
             });
-            System.out.println("------------------------");
         });
 
 
@@ -73,7 +90,7 @@ public class PetriNetEngineService {
         PetriNetRepository.objetos.forEach(objeto -> {
             if (objeto instanceof Lugar) {
                 var lugar = (Lugar) objeto;
-                aaaa.add("  " + lugar.getId() + " (" + lugar.getLabel() + ") ");
+                aaaa.add("  " + lugar.getLabel() + "  ");
                 bbb.add("  " + lugar.getTokens() + "  ");
             }
         });
@@ -81,7 +98,7 @@ public class PetriNetEngineService {
         String[][] table2 = new String[][]{aaaa.toArray(new String[0]), bbb.toArray(new String[0])};
         Table.tableWithLinesAndMaxWidth(table2);
 
-        if (!lugaresAtivos.isEmpty()) {
+        if (!transicoesAtivas.isEmpty()) {
             System.out.println("Press enter to continue");
             try {
                 System.in.read();
