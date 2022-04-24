@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -49,6 +51,20 @@ public class PetriNetEngineService {
 
         montaTabelaTransicoes(transicoesAtivas);
 
+        Map<Lugar, List<Transicao>> algo = new HashMap<>();
+        transicoesAtivas.forEach(transicao -> {
+            var conexoesEntrada = petriNetService.getConexoesEntrada(transicao.getId());
+            conexoesEntrada.forEach(c -> {
+                algo.computeIfAbsent(petriNetService.getLugar(c.getSourceId()), k -> new ArrayList<>()).add(transicao);
+            });
+        });
+
+        for (Map.Entry<Lugar, List<Transicao>> set : algo.entrySet()) {
+            if (set.getValue().size() > 1) {
+                transicoesAtivas.remove(petriNetService.getRandomTransicao(set.getValue()));
+            }
+        }
+
         transicoesAtivas.forEach(transicao -> {
             var conexoesEntrada = petriNetService.getConexoesEntrada(transicao.getId());
             var conexoesSaida = petriNetService.getConexoesSaida(transicao.getId());
@@ -78,7 +94,7 @@ public class PetriNetEngineService {
         }
     }
 
-    private void montaTabelaLugares(){
+    private void montaTabelaLugares() {
         List<String> rowLugares = new ArrayList<>();
         rowLugares.add("Lugar");
         List<String> rowTokens = new ArrayList<>();
@@ -96,7 +112,7 @@ public class PetriNetEngineService {
         Table.tableWithLinesAndMaxWidth(tableLugares);
     }
 
-    private void montaTabelaTransicoes(List<Transicao> transicoesAtivas){
+    private void montaTabelaTransicoes(List<Transicao> transicoesAtivas) {
         List<String> rowTransicoes = new ArrayList<>();
         rowTransicoes.add("Transição");
         List<String> rowHabilitada = new ArrayList<>();

@@ -77,8 +77,8 @@ public class PetriNetService {
         return PetriNetRepository.conexoes.stream().filter(c -> c.getSourceId() == id).collect(Collectors.toList());
     }
 
-    public Conexao getRandomConexao(List<Conexao> conexoes) {
-        return conexoes.get(new Random().nextInt(conexoes.size()));
+    public Transicao getRandomTransicao(List<Transicao> transicoes) {
+        return transicoes.get(new Random().nextInt(transicoes.size()));
     }
 
     public void insereTokenEmLugar(Lugar lugar, int qtd) {
