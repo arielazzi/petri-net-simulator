@@ -125,4 +125,8 @@ public class PetriNetService {
         return false;
     }
 
+    public void clearRede() {
+        PetriNetRepository.objetos.clear();
+        PetriNetRepository.conexoes.clear();
+    }
 }
