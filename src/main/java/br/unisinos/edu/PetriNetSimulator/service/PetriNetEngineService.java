@@ -6,11 +6,7 @@ import br.unisinos.edu.PetriNetSimulator.repository.PetriNetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,11 +27,24 @@ public class PetriNetEngineService {
         if (!transicoesAtivas.isEmpty()) {
             System.out.println("Press enter to continue");
             try {
-                System.in.read();
+                Scanner scanner = new Scanner(System.in);
+                String readString = scanner.nextLine();
+
+                while (!readString.equals("")) {
+                    if (readString.isEmpty()) {
+                        System.out.println("Press enter to continue");
+                    }
+
+                    if (scanner.hasNextLine()) {
+                        readString = scanner.nextLine();
+                    } else {
+                        readString = null;
+                    }
+                }
             } catch (Exception e) {
             }
             executaEnginePassoAPasso();
-        }else {
+        } else {
             petriNetService.clearRede();
             System.out.println("End.");
         }
