@@ -7,7 +7,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class Lugar extends Objeto{
+public class Lugar extends Objeto {
     private int tokens;
     private String label;
 

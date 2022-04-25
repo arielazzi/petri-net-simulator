@@ -23,31 +23,7 @@ public class PetriNetEngineService {
         montaTabelaTransicoes(transicoesAtivas);
         resolveTrasicoesConcorrentes(transicoesAtivas);
         processaTokens(transicoesAtivas);
-
-        if (!transicoesAtivas.isEmpty()) {
-            System.out.println("Press enter to continue");
-            try {
-                Scanner scanner = new Scanner(System.in);
-                String readString = scanner.nextLine();
-
-                while (!readString.equals("")) {
-                    if (readString.isEmpty()) {
-                        System.out.println("Press enter to continue");
-                    }
-
-                    if (scanner.hasNextLine()) {
-                        readString = scanner.nextLine();
-                    } else {
-                        readString = null;
-                    }
-                }
-            } catch (Exception e) {
-            }
-            executaEnginePassoAPasso();
-        } else {
-            petriNetService.clearRede();
-            System.out.println("End.");
-        }
+        controlaExecucao(transicoesAtivas);
     }
 
     private List<Transicao> buscaTransicoesAtivas() {
@@ -153,5 +129,32 @@ public class PetriNetEngineService {
                 petriNetService.insereTokenEmLugar(lugarDestino, c.getMultiplicity());
             });
         });
+    }
+
+    public void controlaExecucao(List<Transicao> transicoesAtivas) {
+        if (!transicoesAtivas.isEmpty()) {
+            System.out.println("Press enter to continue");
+            try {
+                Scanner scanner = new Scanner(System.in);
+                String readString = scanner.nextLine();
+
+                while (!readString.equals("")) {
+                    if (readString.isEmpty()) {
+                        System.out.println("Press enter to continue");
+                    }
+
+                    if (scanner.hasNextLine()) {
+                        readString = scanner.nextLine();
+                    } else {
+                        readString = null;
+                    }
+                }
+            } catch (Exception e) {
+            }
+            executaEnginePassoAPasso();
+        } else {
+            petriNetService.clearRede();
+            System.out.println("End.");
+        }
     }
 }
