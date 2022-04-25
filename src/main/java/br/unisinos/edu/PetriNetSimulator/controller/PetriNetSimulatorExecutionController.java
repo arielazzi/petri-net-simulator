@@ -20,10 +20,5 @@ public class PetriNetSimulatorExecutionController {
     public void passoAPasso() {
         petriNetEngineService.executaEnginePassoAPasso();
     }
-
-    @GetMapping("/completo")
-    public void completo() {
-//        petriNetService.getLugar(lugarId);
-    }
-
+    
 }
