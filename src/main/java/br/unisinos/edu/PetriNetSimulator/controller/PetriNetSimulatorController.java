@@ -100,4 +100,10 @@ public class PetriNetSimulatorController {
         return petriNetService.getToken(lugar);
     }
 
+    @GetMapping("/get-token-quantity")
+    @ResponseStatus(HttpStatus.OK)
+    public int getTokenQuantity(int id) {
+        return petriNetService.getLugar(id).getTokens();
+    }
+
 }
