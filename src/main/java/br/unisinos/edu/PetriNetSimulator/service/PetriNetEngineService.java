@@ -23,7 +23,7 @@ public class PetriNetEngineService {
         montaTabelaTransicoes(transicoesAtivas);
         resolveTrasicoesConcorrentes(transicoesAtivas);
         processaTokens(transicoesAtivas);
-        controlaExecucao(transicoesAtivas);
+        //controlaExecucao(transicoesAtivas);
     }
 
     private List<Transicao> buscaTransicoesAtivas() {
